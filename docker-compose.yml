@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  backend:
+    build: ./backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    # command: python manage.py runserver 0.0.0.0:8000
+    command: tail -F anything # magic
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    # command: npm start
+    command: tail -F anything # magic
+    volumes:
+      - ./frontend:/frontend
+
+  db:
+    image: postgres:alpine
+    volumes:
+      - voting-demo-data:/var/lib/postgresql/data
+
+volumes:
+  voting-demo-data:
+    external: true
